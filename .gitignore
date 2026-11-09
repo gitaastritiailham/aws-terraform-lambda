@@ -1,0 +1,17 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+
+*.pem
+
+terraform.tfvars
+
+.env
+db.php
+
+# Python caches
+__pycache__/
+*.pyc
+
+image/
+/スクリーンショット *.png

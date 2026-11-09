@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title description">
+  <title id="title">AWS Lambda 商品 API 構成図</title>
+  <desc id="description">API Gateway HTTP API から Python 3.12 の Lambda を呼び出し、VPC 内の Private subnet から RDS for MySQL に接続する構成。Lambda は us-east-1a と us-east-1b のサブネットを利用し、RDS インスタンスは us-east-1a に配置。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52647a"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2474c6"/>
+    </marker>
+    <style>
+      text { font-family: "Yu Gothic", "Meiryo", sans-serif; fill: #172b4d; }
+      .title { font-size: 25px; font-weight: 700; }
+      .subtitle { font-size: 13px; fill: #52647a; }
+      .boundary { fill: #f8fafc; stroke: #52647a; stroke-width: 2; }
+      .vpc { fill: #fff; stroke: #8797aa; stroke-width: 2; }
+      .public { fill: #fff8e7; stroke: #e6a700; stroke-width: 1.5; }
+      .private { fill: #edf6ff; stroke: #5b9bd5; stroke-width: 1.5; }
+      .database { fill: #f4efff; stroke: #8b70cf; stroke-width: 1.5; }
+      .zone-info { fill: #f3f6fa; stroke: #c5ced8; stroke-width: 1.5; }
+      .zone { font-size: 14px; font-weight: 700; }
+      .subnet-title { font-size: 13px; font-weight: 700; }
+      .node { fill: #fff; stroke: #a7b3c2; stroke-width: 1.5; }
+      .api { fill: #eaf3ff; stroke: #2474c6; stroke-width: 2; }
+      .lambda { fill: #fff4dc; stroke: #d78b00; stroke-width: 2; }
+      .node-title { font-size: 14px; font-weight: 700; }
+      .node-note { font-size: 11px; fill: #52647a; }
+      .small { font-size: 12px; }
+      .edge { fill: none; stroke: #52647a; stroke-width: 2; marker-end: url(#arrow); }
+      .edge-blue { fill: none; stroke: #2474c6; stroke-width: 2; stroke-dasharray: 6 5; marker-end: url(#arrowBlue); }
+      .edge-label { font-size: 11px; fill: #52647a; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="760" fill="#fff"/>
+  <text x="34" y="42" class="title">Terraform で構築する AWS Lambda 商品 API</text>
+  <text x="35" y="66" class="subtitle">リージョン：us-east-1　｜　API Gateway HTTP API　｜　Lambda Runtime：Python 3.12</text>
+
+  <rect x="28" y="88" width="1144" height="642" rx="16" class="boundary"/>
+  <text x="48" y="117" class="node-title">AWS Cloud</text>
+  <text x="930" y="117" class="small">リージョン：us-east-1</text>
+
+  <rect x="72" y="278" width="210" height="86" rx="11" class="node"/>
+  <text x="177" y="309" text-anchor="middle" class="node-title">利用者</text>
+  <text x="177" y="332" text-anchor="middle" class="node-note">ブラウザー / HTTP クライアント</text>
+
+  <rect x="350" y="258" width="250" height="126" rx="12" class="api"/>
+  <text x="475" y="296" text-anchor="middle" class="node-title">API Gateway</text>
+  <text x="475" y="320" text-anchor="middle" class="node-note">HTTP API</text>
+  <text x="475" y="346" text-anchor="middle" class="node-note">GET /products</text>
+
+  <rect x="667" y="258" width="248" height="126" rx="12" class="lambda"/>
+  <text x="791" y="296" text-anchor="middle" class="node-title">AWS Lambda</text>
+  <text x="791" y="320" text-anchor="middle" class="node-note">Python 3.12 / index.handler</text>
+  <text x="791" y="346" text-anchor="middle" class="node-note">VPC 内の Private subnet を利用</text>
+
+  <path d="M282 321 H342" class="edge"/>
+  <text x="292" y="307" class="edge-label">HTTPS</text>
+  <path d="M600 321 H659" class="edge"/>
+  <text x="607" y="307" class="edge-label">Lambda 呼び出し</text>
+
+  <rect x="48" y="430" width="1104" height="270" rx="13" class="vpc"/>
+  <text x="68" y="459" class="node-title">VPC（10.11.0.0/16）</text>
+
+  <rect x="72" y="480" width="308" height="194" rx="10" class="public"/>
+  <text x="90" y="505" class="zone">アベイラビリティゾーン us-east-1a</text>
+  <rect x="90" y="520" width="272" height="62" rx="8" class="public"/>
+  <text x="226" y="545" text-anchor="middle" class="node-title">パブリックサブネット</text>
+  <text x="226" y="565" text-anchor="middle" class="node-note">NAT Gateway A</text>
+  <rect x="90" y="594" width="272" height="62" rx="8" class="private"/>
+  <text x="226" y="619" text-anchor="middle" class="node-title">プライベートサブネット A</text>
+  <text x="226" y="639" text-anchor="middle" class="node-note">Lambda ENI / RDS インスタンス</text>
+
+  <rect x="400" y="480" width="308" height="194" rx="10" class="zone-info"/>
+  <text x="418" y="505" class="zone">アベイラビリティゾーン us-east-1b</text>
+  <rect x="418" y="520" width="272" height="62" rx="8" class="public"/>
+  <text x="554" y="545" text-anchor="middle" class="node-title">パブリックサブネット</text>
+  <text x="554" y="565" text-anchor="middle" class="node-note">NAT Gateway B</text>
+  <rect x="418" y="594" width="272" height="62" rx="8" class="private"/>
+  <text x="554" y="619" text-anchor="middle" class="node-title">プライベートサブネット B</text>
+  <text x="554" y="639" text-anchor="middle" class="node-note">Lambda ENI</text>
+
+  <rect x="728" y="480" width="400" height="194" rx="10" class="database"/>
+  <text x="746" y="505" class="zone">RDS DB subnet group</text>
+  <text x="746" y="531" class="node-note">Private subnet A / B と us-east-1c の subnet を登録</text>
+  <rect x="760" y="552" width="336" height="82" rx="8" class="node"/>
+  <text x="928" y="580" text-anchor="middle" class="node-title">Amazon RDS for MySQL 8.0</text>
+  <text x="928" y="602" text-anchor="middle" class="node-note">インスタンスは us-east-1a に 1 台配置</text>
+  <text x="928" y="621" text-anchor="middle" class="node-note">Public access：無効</text>
+
+  <path d="M791 384 V410 H226 V586" class="edge-blue"/>
+  <path d="M791 410 H554 V586" class="edge-blue"/>
+  <text x="582" y="402" class="edge-label">VPC 接続（Lambda のサブネット設定）</text>
+
+  <path d="M362 625 H752" class="edge"/>
+  <text x="484" y="614" class="edge-label">MySQL :3306（Lambda SG のみ許可）</text>
+
+  <path d="M226 594 V585" class="edge-blue"/>
+  <path d="M554 594 V585" class="edge-blue"/>
+
+  <text x="72" y="715" class="node-note">※現行実装では Lambda の各呼び出し時に products テーブルを DROP / CREATE してサンプルデータを再投入します。</text>
+</svg>
